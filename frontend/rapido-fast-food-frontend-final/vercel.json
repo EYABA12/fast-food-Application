@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://fast-food-application.onrender.com/api/$1"
+      "destination": "https://fast-food-application-2.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",

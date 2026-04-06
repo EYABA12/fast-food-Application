@@ -17,5 +17,5 @@ FROM eclipse-temurin:17-jdk-jammy
 # Copie du jar depuis l'étape build
 COPY --from=build /workspace/target/*.jar app.jar
 
-EXPOSE 8089
+EXPOSE 8080
 ENTRYPOINT [ "java", "-jar", "app.jar" ]

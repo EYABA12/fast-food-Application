@@ -1,0 +1,10 @@
+.d-flex {
+  display: flex;
+  height: 100vh;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #121214; /* même couleur que ton main-content */
+}

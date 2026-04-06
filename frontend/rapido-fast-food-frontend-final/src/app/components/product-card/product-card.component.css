@@ -1,0 +1,787 @@
+/* --- RESET GLOBAL --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- HEADER PRINCIPAL --- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e1f26;
+  border-bottom: 1px solid #2d2e32;
+  height: 65px;
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Texte gauche */
+.welcome-text {
+  color: #8d8d8d;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.brand-name {
+  color: #40dfff;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+/* Droite header */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.admin-info i {
+  color: #40dfff;
+  font-size: 1.2rem;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #40dfff;
+  color: #40dfff;
+  padding: 7px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #40dfff;
+  color: #000;
+}
+
+/* --- LAYOUT GENERAL --- */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  /* Sidebar fixed, content remains */
+  height: 100vh;
+  width: 100vw;
+  background-color: #0b0b0b;
+  overflow: hidden;
+}
+
+/* --- MAIN CONTENT --- */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #0b0b0b;
+  overflow: hidden;
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background-color: #0b0b0b;
+}
+
+/* --- SECTION PRODUITS --- */
+/* 1. On cache la barre par défaut */
+.products-section {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #0b0b0b;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  /* Pour Firefox */
+  transition: scrollbar-color 0.3s ease;
+}
+
+/* 2. On définit le style de la barre (Chrome, Safari, Edge) */
+.products-section::-webkit-scrollbar {
+  width: 6px;
+  /* Très fine */
+}
+
+.products-section::-webkit-scrollbar-track {
+  background: transparent;
+  /* Fond invisible */
+}
+
+.products-section::-webkit-scrollbar-thumb {
+  background: transparent;
+  /* Curseur invisible par défaut */
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+/* 3. L'astuce : On affiche la barre uniquement au survol (Hover) */
+.products-section:hover::-webkit-scrollbar-thumb {
+  background: #2d2e32
+    /* Ton vert en transparent */
+}
+
+.products-section:hover {
+  scrollbar-color: #2d2e32 transparent;
+  /* Pour Firefox */
+}
+
+/* 4. Quand on clique/scroll activement, on la rend plus visible */
+.products-section::-webkit-scrollbar-thumb:active {
+  background: #2d2e32;
+}
+
+/* --- SEARCH BAR --- */
+.search-bar-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-bar-container i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8d8d8d;
+  font-size: 1.1rem;
+}
+
+.search-bar-container input {
+  width: 100%;
+  background: #1e1f26;
+  border: 1px solid #2d2e32;
+  padding: 12px 15px 12px 45px;
+  border-radius: 10px;
+  color: white;
+}
+
+.search-bar-container input:focus {
+  border-color: #40dfff;
+  outline: none;
+}
+
+/* --- CATEGORIES --- */
+.categories-nav-container {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.categories-nav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-card {
+  background-color: #1e1f26;
+  min-width: 110px;    /* Augmenté de 90px à 110px */
+  height: 130px;       /* Augmenté de 110px à 130px */
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;           /* Un peu plus d'espace entre l'image et le texte */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  padding: 10px;       /* Ajout d'un padding interne */
+}
+
+.cat-card.active {
+  background-color: #25262d;
+  position: relative;
+}
+
+.cat-card.active::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;          /* Ajusté pour être bien en bas */
+  width: 40px;          /* Un peu plus large pour suivre la taille de la carte */
+  height: 3px;
+  background-color: #40dfff;
+  border-radius: 2px;
+}
+
+.cat-card img {
+  width: 45px;
+  height: 45px;
+}
+
+/* Remplace ton bloc .cat-card span actuel par celui-ci */
+.cat-card span {
+  font-size: 0.85rem;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  
+  /* Supprime white-space: nowrap et overflow: hidden */
+  white-space: normal;    /* Autorise le retour à la ligne */
+  overflow: visible;      /* Affiche tout le texte */
+  display: block;
+  line-height: 1.2;       /* Espace entre les deux lignes de texte */
+  
+  /* Optionnel : si tu veux limiter à 2 lignes maximum proprement */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* --- MENU HEADER --- */
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.menu-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff
+}
+
+.btn-filter {
+  background: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btn-filter:hover {
+  background-color: #40dfff;
+  color: #000;
+}
+
+/* --- GRILLE PRODUITS --- */
+/* --- GRILLE PRODUITS AMÉLIORÉE --- */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Cartes un peu plus larges */
+  gap: 25px;
+  padding: 20px;
+}
+
+.product-card {
+  background: #1e1f26;
+  /* Fond sombre pour faire ressortir le produit sur le blanc */
+  border-radius: 20px;
+  /* Arrondis plus prononcés */
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0 0 15px 0;
+  /* Padding en bas uniquement */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  /* Soulèvement plus fluide */
+  border-color: #2ecc71;
+  /* Bordure verte au survol */
+  box-shadow: 0 10px 25px rgba(46, 204, 113, 0.2);
+}
+
+.product-img {
+  background: #1e1f26;
+  /* Fond blanc derrière l'image pour un look propre */
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.product-img img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  /* Garde les proportions de l'image (burger, pizza, etc.) */
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img img {
+  transform: scale(1.1);
+  /* Zoom léger sur l'image au survol */
+}
+
+.product-info {
+  padding: 15px 10px 5px 10px;
+}
+
+.product-info .name {
+  display: block;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+/* Style du prix avec icône */
+.product-info .price-tag {
+  color: #2ecc71;
+  /* VERT */
+  font-weight: 800;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Ajout d'un petit badge "Nouveau" ou "Populaire" (Optionnel) */
+.product-card::before {
+  content: "★";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #f1c40f;
+  /* Or pour l'icône étoile */
+  font-size: 1rem;
+  z-index: 10;
+}
+
+/* Le Container des Variations */
+.product-info {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.description {
+  font-size: 0.8rem;
+  color: #8d8d8d;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Style des Variations */
+.variations-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.variation-badge {
+  background: #2d2e32;
+  border: 1px solid #3d3e42;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.variation-badge.active {
+  background: #40dfff;
+  color: #000;
+  border-color: #40dfff;
+  font-weight: bold;
+}
+
+/* Bouton Ajouter en bas de carte */
+.btn-add-fast {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
+  /* Pousse le bouton vers le bas */
+}
+
+.btn-add-fast:hover {
+  background: #27ae60;
+}
+
+/* --- PANIER DROIT --- */
+.cart-sidebar {
+  width: 290px;
+  background-color: #1e1f26;
+  border-left: 1px solid #2d2e32;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: white;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.cart-header-main h4 {
+  font-size: 1.5rem;
+  color: #40dfff;
+  font-weight: 700;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #2d2e32;
+  padding-bottom: 10px;
+}
+
+.cart-items-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.cart-item-card {
+  background: #25262d;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-left: 4px solid #40dfff;
+}
+
+.item-main-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+}
+
+.item-price-unit {
+  color: #2ecc71 !important;
+  ;
+}
+
+.item-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Le conteneur qui entoure les boutons et le chiffre */
+.qty-selector {
+  display: flex;
+  align-items: center;
+  background: #1e1f26;
+  /* Fond de la petite capsule */
+  border-radius: 8px;
+  padding: 2px;
+  /* Optionnel : pour donner un peu d'espace interne */
+}
+
+/* Le style des boutons + et - eux-mêmes */
+.qty-selector button {
+  width: 25px;
+  height: 25px;
+  background-color: #2ecc71;
+  /* Changé en VERT selon votre demande */
+  color: black;
+  /* Couleur du signe + ou - */
+  border: none;
+  border-radius: 6px;
+  /* Pour des boutons légèrement arrondis */
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Effet au survol des boutons + et - */
+.qty-selector button:hover {
+  background-color: #27ae60;
+  /* Vert plus foncé au survol */
+  transform: scale(1.1);
+}
+
+/* Le chiffre de la quantité entre les deux boutons */
+.qty-val {
+  margin: 0 10px;
+  text-align: center;
+  font-weight: 600;
+  color: white;
+}
+
+.btn-delete {
+  background: rgba(255, 75, 92, 0.1);
+  color: red;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: red;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* --- TOTAL ET FACTURE --- */
+.cart-footer {
+  margin-top: 20px;
+}
+
+.total-section {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.total-val {
+  color: #40dfff;
+}
+
+.btn-invoice {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-invoice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+  filter: brightness(1.1);
+}
+
+/* --- MODAL FACTURE --- */
+.invoice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  /* Fond plus sombre pour focus */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.invoice-content {
+  background: #fff;
+  color: #000;
+  padding: 40px 30px;
+  width: 380px;
+  border-radius: 2px;
+  /* Coins presque carrés pour l'effet papier */
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+/* Effet de papier découpé en haut */
+.invoice-content::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(-45deg, transparent 5px, #fff 5px),
+    linear-gradient(45deg, transparent 5px, #fff 5px);
+  background-size: 10px 10px;
+}
+
+.invoice-header {
+  text-align: center;
+  border-bottom: 2px dashed #000;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.invoice-header h2 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.inv-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+/* Ligne de séparation interne */
+.inv-separator {
+  border-top: 1px dashed #ccc;
+  margin: 15px 0;
+}
+
+.inv-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 2px solid #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.btn-print {
+  margin-top: 30px;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #000;
+  background: transparent;
+  color: #000;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-print:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* --- BOUTON FERMER LE TICKET (Le X) --- */
+.btn-close-invoice {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  /* Déplacé à droite pour plus de clarté */
+  background: #f1f1f1;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  /* Rend le bouton parfaitement rond */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.btn-close-invoice:hover {
+  background: #e74c3c;
+  /* Devient rouge au survol */
+  color: white;
+  transform: rotate(90deg);
+  /* Petit effet de rotation sympa */
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  app-sidebar {
+    width: 80px;
+  }
+
+  .cart-sidebar {
+    width: 250px;
+  }
+
+  .menu-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #2d2e32;
+  }
+
+  .products-section {
+    padding: 15px;
+  }
+.categories-nav-container {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto; /* Force le scroll horizontal */
+  white-space: nowrap; /* Empêche les cartes de passer à la ligne suivante */
+  padding: 10px 5px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Scroll fluide sur mobile */
+}
+}
+
+/* --- PERSONNALISATION DU SCROLLBAR --- */
+
+/* Taille globale */
+.products-section::-webkit-scrollbar,
+.cart-items-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Scroll de la partie BLANCHE (Menu) */
+.products-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Gris très clair sur le blanc */
+  border-radius: 10px;
+}
+
+/* Scroll de la partie NOIRE (Panier) */
+.cart-items-container::-webkit-scrollbar-track {
+  background: #1e1f26;
+  /* Même couleur que le panier pour être invisible */
+  border-radius: 10px;
+}
+
+/* Le curseur VERT (Commun aux deux) */
+.products-section::-webkit-scrollbar-thumb,
+.cart-items-container::-webkit-scrollbar-thumb {
+  background: #1e1f26;
+  /* Ton vert */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Effet au survol */
+.products-section::-webkit-scrollbar-thumb:hover,
+.cart-items-container::-webkit-scrollbar-thumb:hover {
+  background: #1e1f26;
+}

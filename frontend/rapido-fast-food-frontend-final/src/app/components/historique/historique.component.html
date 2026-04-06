@@ -1,0 +1,126 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="content-area">
+    <app-header></app-header>
+
+    <div class="header-section d-flex justify-content-between align-items-center mb-4 mt-4">
+      <h2 class="page-title">Historique Détaillé</h2>
+
+      <div class="filter-box">
+        <label class="text-muted me-2">Choisir la date :</label>
+        <input type="date" class="custom-input" [(ngModel)]="dateSelectionnee" (change)="filtrerParDate()">
+      </div>
+    </div>
+
+    <!-- Ajout d'un indicateur de date et total -->
+    <div class="date-info mb-4 p-3 rounded" style="background-color: #1e1f26; border: 1px solid #2d2e32;">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <span class="text-muted">Commandes du :</span>
+          <strong class="text-white ms-2">{{ dateSelectionnee | date:'dd MMMM yyyy' }}</strong>
+        </div>
+        <div>
+          <span class="text-muted">Total journalier :</span>
+          <strong class="text-white ms-2">{{ totalJournalier | number:'1.0-3' }}dt</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">N° Cmd</th>
+            <th><i class="bi bi-calendar-event"></i> Date</th>
+            <th><i class="bi bi-clock"></i> Heure</th>
+            <th><i class="bi bi-basket3-fill"></i> Produits</th>
+            <th><i class="bi bi-currency-dollar"></i> Prix (Détail)</th>
+            <th><i class="bi bi-graph-up"></i> Total Commande</th>
+            <th class="text-center"><i class="bi bi-eye"></i> Détails</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngIf="commandesFiltrees.length === 0">
+            <td colspan="6" class="text-center py-5">
+              <div class="text-muted">
+                <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+                <p class="mt-2">Aucune commande trouvée pour cette date</p>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngFor="let cmd of commandesFiltrees">
+            <td class="order-badge">{{ cmd.orderNumber }}</td>
+            <td><span class="text-white">{{ cmd.date | date:'dd MMM yyyy' }}</span></td>
+            <td><span class="text-muted">{{ cmd.heure }}</span></td>
+
+            <td>
+              <div *ngFor="let p of cmd.produits" class="product-item">{{ p.nom }}</div>
+            </td>
+
+            <td>
+              <div *ngFor="let p of cmd.produits" class="price-item">{{ p.prix | number:'1.0-3' }}dt</div>
+            </td>
+
+            <td>
+              <span class="total-amount">{{ getSommeProduits(cmd.produits) | number:'1.0-3' }}dt</span>
+            </td>
+
+            <td class="text-center">
+              <button class="btn-eye" (click)="ouvrirPopup(cmd)">
+                <i class="bi bi-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Le modal reste inchangé -->
+<div class="modal-overlay" *ngIf="commandeSelectionnee" (click)="fermerPopup()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Détails de la Commande <span>{{ commandeSelectionnee.id }}</span></h3>
+      <button class="btn-close-modal" (click)="fermerPopup()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="info-row">
+        <span><i class="bi bi-calendar3"></i> Date:</span>
+        <strong>{{ commandeSelectionnee.date | date:'dd MMMM yyyy' }}</strong>
+      </div>
+      <div class="info-row">
+        <span><i class="bi bi-clock"></i> Heure:</span>
+        <strong>{{ commandeSelectionnee.heure }}</strong>
+      </div>
+      <div class="info-row">
+        <span><i class="bi bi-info-circle"></i> Statut:</span>
+        <span class="status-badge status-done">{{ commandeSelectionnee.statut }}</span>
+      </div>
+
+      <hr class="modal-divider">
+
+      <div class="receipt-title">Récapitulatif Articles</div>
+
+      <div class="receipt-item" *ngFor="let p of commandeSelectionnee.produits">
+        <span class="p-name">{{ p.nom }}</span>
+        <span class="p-price">{{ p.prix | number:'1.0-3' }}dt</span>
+      </div>
+
+      <div class="total-receipt">
+        <span>TOTAL</span>
+        <span>{{ getSommeProduits(commandeSelectionnee.produits) | number:'1.0-3' }}dt</span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-print" (click)="imprimer()">
+        <i class="bi bi-printer"></i> Imprimer le ticket
+      </button>
+    </div>
+  </div>
+</div>

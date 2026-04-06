@@ -1,0 +1,230 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <app-header></app-header>
+    <h2 class="page-title mt-4">Gestion des Produits</h2>
+
+    <!-- BARRE DE RECHERCHE, FILTRE ET BOUTON SUR LA MÊME LIGNE -->
+    <div class="action-bar">
+      <div class="search-filter-container">
+        <!-- Barre de recherche -->
+        <div class="search-group">
+          <div class="search-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" class="custom-input search-input" placeholder="Rechercher un produit..."
+              [(ngModel)]="searchQuery" (input)="filterProducts()">
+          </div>
+        </div>
+
+        <!-- Filtre des catégories -->
+        <div class="filter-group">
+          <select class="custom-select-dark" [(ngModel)]="selectedCategory" (change)="filterProducts()">
+            <option value="">Toutes les catégories</option>
+            <option *ngFor="let cat of categories" [value]="cat.name">
+              {{ cat.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Bouton Ajouter un produit -->
+      <button type="button" class="btn-add-product" (click)="togglePopup()">
+        <i class="bi bi-plus me-2"></i>Ajouter un produit
+      </button>
+    </div>
+
+    <!-- POPUP AJOUT DE PRODUIT -->
+    <div class="modal-overlay" *ngIf="isPopupOpen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="page-title" style="margin: 0; font-size: 1.5rem;">Nouveau Produit</h2>
+          <button (click)="togglePopup()"
+            style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+
+        <div class="modal-body custom-scrollbar" style="padding: 20px 0; overflow-y: auto;">
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Nom du produit</label>
+            <input type="text" class="custom-input" placeholder="Ex: Pizza Royale" [(ngModel)]="newProduct.name"
+              autofocus>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Description</label>
+            <textarea class="custom-input" rows="2" placeholder="Description du produit..."
+              [(ngModel)]="newProduct.description"></textarea>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Catégorie</label>
+            <select class="custom-input custom-select-dark" [(ngModel)]="newProduct.category" name="category">
+              <option [ngValue]="null" disabled selected>Choisir une catégorie...</option>
+
+              <option *ngFor="let cat of categories" [ngValue]="cat">
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Prix Unique (Standard)</label>
+            <input type="number" class="custom-input" placeholder="Ex: 12.500" [(ngModel)]="newProduct.price">
+          </div>
+
+
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 10px;">Photo du produit</label>
+            <div class="image-upload-wrapper">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Cliquez pour ajouter une image</span>
+              <input type="file" class="file-input" accept="image/*" (change)="onFileSelected($event)">
+            </div>
+            <div *ngIf="newProduct.imageUrl" class="image-preview mt-2">
+              <img [src]="newProduct.imageUrl" alt="Aperçu"
+                style="max-width: 100px; border-radius: 8px; border: 2px solid #40dfff;">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="display: flex; gap: 10px;">
+          <button class="btn-cancel" (click)="togglePopup()" style="flex: 1;">Annuler</button>
+          <button class="btn-save" style="flex: 1;" (click)="addProduct()"
+            [disabled]="!newProduct.name || !newProduct.category ">
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- POPUP ÉDITION DE PRODUIT -->
+    <div class="modal-overlay" *ngIf="isEditPopupOpen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="page-title" style="margin: 0; font-size: 1.5rem;">Modifier le Produit</h2>
+          <button (click)="closeEditPopup()"
+            style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+
+        <div class="modal-body" style="padding: 20px 0;">
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Nom du produit</label>
+            <input type="text" class="custom-input" placeholder="Ex: Pizza Royale" [(ngModel)]="editProduct.name"
+              (keyup.enter)="updateProduct()" autofocus>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Description</label>
+            <textarea class="custom-input" rows="2" placeholder="Description du produit..."
+              [(ngModel)]="editProduct.description"></textarea>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Catégorie</label>
+            <select class="custom-input custom-select-dark" [(ngModel)]="editProduct.category"
+              [compareWith]="compareCategories">
+              <option *ngFor="let cat of categories" [ngValue]="cat">
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 5px;">Prix Unique (Standard)</label>
+            <input type="number" class="custom-input" placeholder="Ex: 8.000" [(ngModel)]="editProduct.price">
+           
+          </div>
+
+
+
+          <div class="input-group mb-3">
+            <label style="color: #8d8d8d; display: block; margin-bottom: 10px;">Photo du produit</label>
+            <div class="image-upload-wrapper">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Cliquez pour modifier l'image</span>
+              <input type="file" class="file-input" accept="image/*" (change)="onFileSelected($event, true)">
+            </div>
+            <div *ngIf="editProduct.imageUrl" class="image-preview mt-2">
+              <img [src]="editProduct.imageUrl" alt="Aperçu" style="max-width: 100px; border-radius: 8px;">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="display: flex; gap: 10px;">
+          <button class="btn-cancel" (click)="closeEditPopup()" style="flex: 1;">Annuler</button>
+          <button class="btn-save" style="flex: 1;" (click)="updateProduct()"
+            [disabled]="!editProduct.name || !editProduct.category ">
+            Mettre à jour
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLEAU DES PRODUITS -->
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Nom produit</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+            <th class="text-center">Disponibilité</th>
+            <th>Prix</th>
+            <th>image</th>
+            <th class="text-center">Supprimer</th>
+            <th class="text-center">Modifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts">
+            <td>{{ product.name }}</td>
+            <td style="color: #c0c0c0; font-size: 0.9rem; max-width: 250px;">{{ product.description }}</td>
+            <td>
+              <span class="category-badge" [class]="'category-' + product.category">
+                {{ product.category?.name | titlecase }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [class]="product.available ? 'status-online' : 'status-offline'">
+                {{ product.available ? 'En stock' : 'Épuisé' }}
+              </span>
+            </td>
+            <td style="font-weight: bold; color: #40dfff;">
+              <div *ngIf="product.price && product.price > 0">
+                {{ product.price | number:'1.0-3' }}dt
+              </div>
+
+              <div *ngIf="!product.price || product.price === 0">
+                <div *ngFor="let v of product.variations" style="font-size: 0.85rem; margin-bottom: 2px;">
+                  <span style="color: #8d8d8d; font-weight: normal;">{{ v.size }} :</span>
+                  {{ v.price | number:'1.0-3' }}dt
+                </div>
+              </div>
+            </td>
+            <td>
+              <img [src]="product.imageUrl" alt="Produit"
+                style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover; border: 1px solid #444;"
+                *ngIf="product.imageUrl">
+              <i class="bi bi-image" *ngIf="!product.imageUrl" style="font-size: 1.5rem; color: #555;"></i>
+            </td>
+            <td class="text-center">
+              <button class="btn-delete" (click)="deleteProduct(product.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+            <td class="text-center">
+              <button class="btn-edit" (click)="openEditPopup(product)">
+                <i class="bi bi-pencil"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="filteredProducts.length === 0" class="no-results text-center py-5">
+        <i class="bi bi-search" style="font-size: 3rem; color: #8d8d8d;"></i>
+        <p style="color: #8d8d8d; margin-top: 15px;">Aucun produit trouvé</p>
+      </div>
+    </div>
+  </main>
+</div>

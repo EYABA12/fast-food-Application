@@ -1,0 +1,238 @@
+* {
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 280px;
+  background: #121214;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  height: 100vh;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo Section */
+/* Logo Section - Conteneur principal */
+/* Conteneur principal plus large pour tout tenir sur une ligne */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 5px;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+/* Logo plus grand avec un effet de brillance */
+.logo-container {
+  width: 75px;  /* Augmenté */
+  height: 75px; /* Augmenté */
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(64, 223, 255, 0.3);
+  box-shadow: 0 0 20px rgba(64, 223, 255, 0.1);
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+/* Style du titre sur une seule ligne */
+.brand-name {
+  white-space: nowrap; /* Empêche le retour à la ligne */
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif; /* Police très clean */
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -1px;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.brand-name span {
+  color: #40dfff;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+
+
+/* Navigation Menu */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  color: #8e8e93;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+}
+
+.menu a i {
+  font-size: 1.3rem;
+  transition: transform 0.3s;
+}
+
+.menu a:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+}
+
+.menu a:hover i {
+  transform: translateX(3px);
+}
+
+.menu a.active {
+  background: linear-gradient(135deg, #40dfff20, #0088ff20);
+  color: #40dfff;
+  border-left: 3px solid #40dfff;
+  border-radius: 4px 12px 12px 4px;
+}
+
+.menu a.active i {
+  color: #40dfff;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  margin: 16px 0;
+}
+
+/* Bottom Section */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.support-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 4px;
+}
+
+.support-box i {
+  font-size: 1.5rem;
+  color: #40dfff;
+}
+
+.support-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.support-text span {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.support-text a {
+  font-size: 0.75rem;
+  color: #8e8e93;
+  text-decoration: none;
+}
+
+.support-text a:hover {
+  color: #40dfff;
+}
+
+/* User Profile */
+.user-profile {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.3s;
+}
+
+.avatar img {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid rgba(64, 223, 255, 0.2);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.user-info .name {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.user-info .role {
+  color: #8e8e93;
+  font-size: 0.75rem;
+}
+
+.logout-container {
+  padding: 0 12px;
+  margin-bottom: 10px;
+}
+
+.btn-logout {
+  width: 100%;
+  background: rgba(255, 69, 58, 0.1);
+  border: 1px solid rgba(255, 69, 58, 0.2);
+  color: #ff453a;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 69, 58, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-logout i {
+  font-size: 1.2rem;
+}

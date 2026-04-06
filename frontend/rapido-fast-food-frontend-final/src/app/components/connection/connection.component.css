@@ -1,0 +1,149 @@
+.auth-container {
+  display: flex;
+  min-height: 100vh; /* plus sûr que height */
+  width: 100vw;      /* prend toute la largeur écran */
+  background-color: #121212;
+  overflow: hidden;
+}
+/* RESET GLOBAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* empêche le blanc */
+  background-color: #121212;
+}
+
+/* --- CÔTÉ IMAGE --- */
+.auth-image-side {
+  flex: 1.2;
+  background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.auth-image-side::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Voile pour faire ressortir le logo */
+}
+
+.logo-overlay {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.brand-logo {
+  font-family: 'Brush Script MT', cursive;
+  color: #40dfff;
+  font-size: 5rem;
+}
+
+/* --- CÔTÉ FORMULAIRE --- */
+.auth-form-side {
+  flex: 1;
+  padding: 50px 80px;
+  display: flex;
+  flex-direction: column;
+  background-color: #121212;
+}
+
+.auth-header-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #8d8d8d;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: 0.3s;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  border-bottom: 2px solid #2ecc71; /* Le vert de ton bouton */
+  padding-bottom: 5px;
+}
+
+.welcome-text {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.brand-sub {
+  color: #8d8d8d;
+  margin-bottom: 50px;
+}
+
+.highlight { color:#40dfff; font-weight: bold; }
+
+/* --- INPUTS ÉLÉGANTS --- */
+.input-group {
+  margin-bottom: 30px;
+}
+
+.input-group label {
+  display: block;
+  color: #c0c0c0;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.input-group input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-bottom-color: #2ecc71;
+}
+
+.form-options {
+  text-align: right;
+  margin-bottom: 40px;
+}
+
+.forgot-link {
+  color: #8d8d8d;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+/* --- BOUTON VERT (STYLE IMAGE) --- */
+.btn-primary-green {
+  width: 100%;
+  background-color: #2ecc71; /* Vert vibrant */
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.btn-primary-green:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}

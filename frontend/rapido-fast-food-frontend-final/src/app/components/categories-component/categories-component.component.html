@@ -1,0 +1,116 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <app-header></app-header>
+
+    <h2 class="page-title">Gestion des Catégories</h2>
+
+    <div class="action-bar">
+      <button type="button" class="btn-add-cat" (click)="toggleAddPopup()">
+        <i class="bi bi-plus-circle me-2"></i>Ajouter une catégorie
+      </button>
+    </div>
+
+    <div class="modal-overlay" *ngIf="isPopupAddOpen">
+      <div class="modal-content">
+       <div class="modal-header">
+          <h2 class="modal-title-text">Nouvelle Catégorie</h2>
+           <button (click)="toggleAddPopup()"
+            style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label class="input-label">Photo de la catégorie</label>
+          <div class="image-upload-wrapper">
+            <i class="bi bi-cloud-arrow-up"></i>
+            <span>Cliquez pour ajouter une image</span>
+            <input type="file" class="file-input" accept="image/*" (change)="onFileSelected($event, false)">
+          </div>
+          
+          <div *ngIf="newCategory.imageUrl" class="image-preview">
+            <img [src]="newCategory.imageUrl" alt="Aperçu">
+          </div>
+
+          <label class="input-label">Nom de la catégorie</label>
+          <input [(ngModel)]="newCategory.name" type="text" class="custom-input" placeholder="Ex: Pizza, Drinks...">
+        </div>
+
+       
+
+        <div class="modal-footer" style="display: flex; gap: 10px;">
+          <button class="btn-edit" (click)="toggleAddPopup()" style="flex: 1; width: auto;">Annuler</button>
+          <button class="btn-add-cat" (click)="onSave()" style="flex: 1; justify-content: center;">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="isPopupModifOpen">
+      <div class="modal-content">
+       <div class="modal-header">
+          <h2 class="modal-title-text">Modifier Catégorie</h2>
+           <button (click)="toggleModifPopup()"
+            style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label class="input-label">Changer l'image</label>
+          <div class="image-upload-wrapper">
+            <i class="bi bi-pencil-square"></i>
+            <input type="file" class="file-input" accept="image/*" (change)="onFileSelected($event, true)">
+          </div>
+          <div *ngIf="editCategory.imageUrl" class="image-preview">
+            <img [src]="editCategory.imageUrl" alt="Aperçu">
+          </div>
+
+          <label class="input-label">Nom de la catégorie</label>
+          <input [(ngModel)]="editCategory.name" type="text" class="custom-input">
+        </div>
+
+        <div class="modal-footer" style="display: flex; gap: 10px;">
+          <button class="btn-edit" (click)="toggleModifPopup()" style="flex: 1; width: auto;">Annuler</button>
+          <button class="btn-add-cat" (click)="onUpdate()"
+            style="flex: 1; justify-content: center;">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th class="col-name">Nom De catégorie</th>
+            <th class="col-name">Image de catégorie </th>
+            <th class="col-action text-center">Supprimer</th>
+            <th class="col-action text-center">Modifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of categories">
+            <td class="col-img">
+              <div class="img-container">
+                <img [src]="cat.imageUrl" *ngIf="cat.imageUrl" alt="cat-img">
+                <i class="bi bi-image" *ngIf="!cat.imageUrl"></i>
+              </div>
+            </td>
+            <td>{{ cat.name }}</td>
+            <td class="text-center">
+              <button class="btn-delete" (click)="onDelete(cat.id!)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+             
+            <td class="text-center">
+              <button class="btn-edit" (click)="openEdit(cat)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="categories.length === 0">
+            <td colspan="3" class="text-center" style="padding: 20px; color: gray;">
+              Aucune catégorie trouvée.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>

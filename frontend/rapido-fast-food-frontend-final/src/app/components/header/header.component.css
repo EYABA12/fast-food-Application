@@ -1,0 +1,187 @@
+.navbar {
+  height: 64px;
+  background: #1e1f26;
+  border-bottom: 1px solid #2d2e32;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Bouton Plein Écran */
+.fullscreen-btn {
+  background: transparent;
+  border: 1px solid #40dfff;
+  color: #40dfff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.fullscreen-btn i {
+  font-size: 1.2rem;
+}
+
+.fullscreen-btn:hover {
+  background: #40dfff;
+  color: #000;
+  transform: scale(1.05);
+}
+
+.fullscreen-btn:active {
+  transform: scale(0.95);
+}
+
+/* Section Utilisateur */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  background: rgba(64, 223, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(64, 223, 255, 0.2);
+}
+
+.user i {
+  color: #40dfff;
+  font-size: 1.3rem;
+}
+
+/* Bouton Déconnexion */
+.logout {
+  background: transparent;
+  border: 1px solid #ff4757;
+  color: #ff4757;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.logout i {
+  font-size: 1.2rem;
+}
+
+.logout:hover {
+  background: #ff4757;
+  color: #000;
+  transform: scale(1.05);
+}
+
+.logout:active {
+  transform: scale(0.95);
+}
+
+/* Animation pour le changement d'icône */
+.fullscreen-btn i {
+  transition: transform 0.3s ease;
+}
+
+.fullscreen-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .brand {
+    font-size: 1.2rem;
+  }
+
+  .navbar-right {
+    gap: 12px;
+  }
+
+  .user span {
+    display: none;
+    /* Cacher le texte "ADMIN" sur mobile */
+  }
+
+  .user {
+    padding: 6px;
+  }
+}
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Espace entre le logo et la date */
+}
+
+.accent {
+  color: #40dfff; /* Le bleu de ton logo */
+  font-weight: 300;
+}
+/* Style de la date et l'heure */
+.header-date-time {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.header-date-time i {
+  color: #40dfff;
+  font-size: 0.9rem;
+}
+
+.date-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding-right: 12px;
+}
+
+.time-text {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Courier New', Courier, monospace; /* Pour éviter le scintillement */
+  color: #ffffff;
+}
+/* Style pour le mode plein écran */
+:host-context(:fullscreen) .navbar {
+  background: rgba(30, 31, 38, 0.95);
+  backdrop-filter: blur(5px);
+}

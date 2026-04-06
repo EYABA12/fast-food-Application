@@ -1,0 +1,30 @@
+<header class="navbar">
+ <div class="navbar-left">
+    <span class="brand">Bienvenue chez Rapido <span class="accent">FOOD</span></span>
+    
+    <div class="header-date-time">
+      <i class="bi bi-calendar3"></i>
+      <span class="date-text">{{ currentDate | date:'dd MMM yyyy' }}</span>
+      <span class="time-text">{{ currentDate | date:'HH:mm:ss' }}</span>
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    <!-- Bouton Plein Écran -->
+    <button class="fullscreen-btn" (click)="toggleFullscreen()"
+      [title]="isFullscreen ? 'Sortir du plein écran' : 'Plein écran'">
+      <i [class]="isFullscreen ? 'bi bi-fullscreen-exit' : 'bi bi-arrows-fullscreen'"></i>
+    </button>
+
+    <!-- Section Utilisateur -->
+    <div class="user">
+      <i class="bi bi-person-circle"></i>
+      <span>{{ isAdmin ? 'ADMIN' : 'USER' }}</span>
+    </div>
+
+    <!-- Bouton Déconnexion -->
+    <button routerLink="/connection" class="logout">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
+</header>

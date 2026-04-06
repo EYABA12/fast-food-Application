@@ -1,0 +1,40 @@
+<div class="auth-container">
+  <div class="auth-image-side">
+    <div class="logo-overlay">
+      <span class="brand-logo">Rapido Food</span>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-header-nav">
+      <a routerLink="/connection" class="nav-link active">Se connecter</a>
+      <a routerLink="/inscription" class="nav-link">S'inscrire</a>
+    </div>
+
+    <div class="form-content">
+      <h2 class="welcome-text">Bienvenue !</h2>
+      <p class="brand-sub">Chez <span class="highlight">Rapido Food</span></p>
+
+     <form class="custom-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <div class="input-group">
+    <label>Email</label>
+    <input type="email" formControlName="email" placeholder="votre@email.com">
+  </div>
+
+  <div class="input-group">
+    <label>Mot de passe</label>
+    <input type="password" formControlName="password" placeholder="••••••••">
+  </div>
+
+  <div *ngIf="errorMessage" class="text-danger small mt-2">
+    {{ errorMessage }}
+  </div>
+
+
+  <button type="submit" [disabled]="loginForm.invalid" class="btn-primary-green">
+    Se connecter
+  </button>
+</form>
+    </div>
+  </div>
+</div>

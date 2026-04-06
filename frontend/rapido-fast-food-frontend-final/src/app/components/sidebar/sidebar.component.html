@@ -1,0 +1,40 @@
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo">
+  <div class="logo-container">
+    <img src="logo.png" alt="Rapido Logo" class="logo-img">
+  </div>
+  <h1 class="brand-name">Rapido <span>FOOD</span></h1>
+</div>
+    <nav class="menu">
+      <a routerLink="/Accueil" routerLinkActive="active">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Tableau de Bord</span>
+      </a>
+
+      <a routerLink="/categories" routerLinkActive="active">
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Catégories</span>
+      </a>
+
+      <a routerLink="/Gestion-Produit" routerLinkActive="active">
+        <i class="bi bi-egg-fried"></i>
+        <span>Produits</span>
+      </a>
+
+      <div class="divider"></div>
+
+      <a *ngIf="isAdmin" routerLink="/historique" routerLinkActive="active">
+        <i class="bi bi-clock-history"></i>
+        <span>Historique</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="logout-container">
+    <button routerLink="/connection" class="btn-logout" title="Déconnexion">
+      <i class="bi bi-power"></i>
+      <span>Déconnexion</span>
+    </button>
+  </div>
+</aside>

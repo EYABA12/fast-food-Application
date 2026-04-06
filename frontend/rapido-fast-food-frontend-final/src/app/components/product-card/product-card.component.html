@@ -1,0 +1,183 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-header></app-header>
+
+    <div class="dashboard-body">
+      <!-- SECTION PRODUITS -->
+      <section class="products-section">
+        <!-- Barre de recherche -->
+        <div class="search-bar-container">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Rechercher un produit..." [(ngModel)]="searchTerm" (input)="filterProducts()">
+        </div>
+
+        <div class="categories-nav-container">
+          <div class="cat-card" [class.active]="selectedCategory === ''" (click)="selectCategory('')">
+            <img src="all.png" alt="Tout">
+            <span>Tout</span>
+          </div>
+
+          <div class="cat-card" *ngFor="let cat of categories" [class.active]="selectedCategory === cat.name"
+            (click)="selectCategory(cat.name)">
+       
+                <img [src]="cat.imageUrl" *ngIf="cat.imageUrl" alt="cat-img">
+                <i class="bi bi-image" *ngIf="!cat.imageUrl"></i>
+            
+            <span>{{ cat.name }}</span>
+          </div>
+        </div>
+
+        <!-- Grid Produits -->
+        <div class="products-grid">
+          <div class="product-card" *ngFor="let product of filteredProducts">
+            <div class="product-img">
+              <img [src]="product.imageUrl || 'assets/default-food.png'" [alt]="product.name">
+            </div>
+
+            <div class="product-info">
+              <span class="name">{{ product.name }}</span>
+              <p class="description" *ngIf="product.description">{{ product.description }}</p>
+
+              <div class="variations-container" *ngIf="product.variations && product.variations.length > 0">
+                <button *ngFor="let v of product.variations" class="variation-badge"
+                  [class.active]="product.selectedVariation?.id === v.id"
+                  (click)="product.selectedVariation = v; $event.stopPropagation()">
+                  {{ v.size }}
+                </button>
+              </div>
+
+              <div class="price-section">
+                <span class="price-tag">
+                  {{ (product.selectedVariation ? product.selectedVariation.price : getProductPrice(product)) |
+                  number:'1.0-3' }}dt
+                </span>
+              </div>
+
+              <button class="btn-add-fast" (click)="addSelectedToCart(product)">
+                <i class="bi bi-cart-plus"></i> Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANIER -->
+      <section class="cart-sidebar">
+        <div class="cart-header-main">
+          <h4>Order Details</h4>
+        </div>
+
+        <div class="cart-items-container">
+          <div *ngIf="cart.length === 0" class="empty-cart">Panier vide</div>
+
+          <div class="cart-item-card" *ngFor="let item of cart">
+            <div class="item-main-info">
+              <span class="item-name">{{ item.name }}</span>
+            </div>
+
+            <div class="item-controls">
+              <div class="qty-selector">
+                <button (click)="decreaseQty(item)">-</button>
+                <span class="qty-val">{{ item.qty }}</span>
+                <button (click)="addToCart(item.name, item.price)">+</button>
+              </div>
+
+              <div class="item-total-price">
+                {{ (item.price * item.qty) | number:'1.0-3' }}dt
+              </div>
+
+              <button class="btn-delete" (click)="removeFromCart(item)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-footer">
+          <div class="total-section">
+            <span>Total : </span>
+            <span class="total-val">{{ getTotal() | number:'1.0-3' }}dt</span>
+          </div>
+          <button class="btn-invoice" (click)="openInvoice()">
+            <i class="bi bi-receipt"></i> Facture
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- MODAL FACTURE -->
+    <div class="invoice-modal" *ngIf="showInvoice">
+      <div class="invoice-content">
+        <button class="btn-close-invoice" (click)="showInvoice = false">×</button>
+        <div class="invoice-header">
+          <h2>REÇU DE CAISSE</h2>
+          <h2 style="font-size: 24px; border: 2px solid black; padding: 5px;">
+        Client N°: {{ lastOrderNumber }}
+    </h2>
+          <p>Date: {{ currentDate | date:'short' }}</p>
+        </div>
+        <div class="inv-body">
+          <div class="inv-row" *ngFor="let item of cart">
+            <span>{{ item.qty }}x {{ item.name }}</span>
+            <span>{{ (item.price * item.qty) | number:'1.0-3' }}dt</span>
+          </div>
+        </div>
+        <div class="inv-total">
+          <strong>TOTAL:</strong>
+          <strong>{{ getTotal() | number:'1.0-3' }}dt</strong>
+        </div>
+        <button class="btn-print" (click)="imprimerFacture()">Imprimer</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ZONE D'IMPRESSION (Optimisée pour imprimante thermique 80mm) -->
+  <div id="print-receipt" class="print-only">
+    <div class="receipt-header">
+      <h1>Rapido FOOD</h1>
+      <h2 style="font-size: 24px; border: 2px solid black; padding: 5px;">
+        Client N°: {{ lastOrderNumber }}
+    </h2>
+      <p>*** REÇU DE CAISSE ***</p>
+      <p>Date: {{ currentDate | date:'dd/MM/yyyy HH:mm' }}</p>
+    </div>
+
+    <div class="receipt-divider">================================</div>
+
+    <table class="receipt-table">
+      <thead>
+        <tr>
+          <th class="qty">Qté</th>
+          <th class="item">Article</th>
+          <th class="price">Prix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cart">
+          <td>{{ item.qty }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ (item.price * item.qty) | number:'1.0-3' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="receipt-divider">--------------------------------</div>
+
+    <div class="receipt-total">
+      <span>TOTAL A PAYER:</span>
+      <span>{{ getTotal() | number:'1.0-3' }}dt</span>
+    </div>
+
+    <div class="receipt-divider">================================</div>
+
+    <div class="receipt-footer">
+      <p>Merci de votre confiance !</p>
+      <p>A bientôt chez Rapido FOOD</p>
+    </div>
+
+    <!-- Espace pour faciliter la découpe manuelle -->
+    <div class="printer-spacing"></div>
+  </div>
+</div>

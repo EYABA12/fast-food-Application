@@ -1,0 +1,306 @@
+/* --- GLOBAL & LAYOUT --- */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0b0b;
+  font-family: 'Poppins', sans-serif;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  background-color: #0b0b0b;
+  padding-left: 280px;
+  /* Sidebar width */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: #0b0b0b;
+  overflow-y: auto;
+}
+
+/* --- TITRES --- */
+.page-title {
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: inline-block;
+}
+
+.page-title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  background-color: #40dfff;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+/* --- BOUTONS & ACTIONS --- */
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+}
+
+.btn-add-cat {
+  background: linear-gradient(135deg, #40dfff, #0088ff);
+  color: #000;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 136, 255, 0.3);
+}
+
+.btn-add-cat:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 136, 255, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-add-cat i {
+  font-size: 1.2rem;
+}
+
+/* --- TABLEAU STYLE "CARDS" --- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.custom-table th {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 15px 20px;
+  text-align: left;
+}
+
+.custom-table td {
+  padding: 15px 20px;
+  background-color: #1e1f26;
+  color: #40dfff;
+  border-top: 1px solid #2d2e32;
+  border-bottom: 1px solid #2d2e32;
+}
+
+.custom-table td:first-child {
+  border-left: 1px solid #2d2e32;
+  border-radius: 15px 0 0 15px;
+}
+
+.custom-table td:last-child {
+  border-right: 1px solid #2d2e32;
+  border-radius: 0 15px 15px 0;
+}
+
+/* --- BOUTONS D'ACTION DANS TABLEAU --- */
+.btn-delete,
+.btn-edit {
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete {
+  background-color: rgba(255, 64, 64, 0.1);
+  /* Rouge léger pour delete */
+  color: #ff4040;
+}
+
+.btn-edit {
+  background-color: rgba(64, 223, 255, 0.1);
+  color: #40dfff;
+}
+
+.btn-delete:hover,
+.btn-edit:hover {
+  opacity: 0.8;
+}
+
+/* --- MODAL / POPUP --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: #1e1f26;
+  border: 1px solid #2d2e32;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+  padding: 25px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2d2e32;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.custom-input {
+  width: 100%;
+  background: #0b0b0b;
+  border: 1px solid #2d2e32;
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+  box-sizing: border-box;
+  /* Important pour ne pas dépasser */
+}
+
+.custom-input:focus {
+  border-color: #40dfff;
+  outline: none;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+}/* --- AMÉLIORATION TABLEAU --- */
+.img-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #2d2e32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #444;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- ZONE UPLOAD IMAGE --- */
+.image-upload-wrapper {
+  width: 100%;
+  height: 100px;
+  border: 2px dashed #2d2e32;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  position: relative; /* Indispensable pour l'input invisible */
+  background-color: #0b0b0b;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.image-upload-wrapper:hover {
+  border-color: #40dfff;
+  background-color: rgba(64, 223, 255, 0.05);
+}
+
+.image-upload-wrapper i {
+  font-size: 1.8rem;
+  color: #40dfff;
+  margin-bottom: 5px;
+}
+
+.image-upload-wrapper span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* RENDRE L'INPUT INVISIBLE MAIS CLIQUABLE */
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* On cache le bouton "Choose file" par défaut */
+  cursor: pointer;
+}
+
+/* APERÇU DE L'IMAGE APRÈS SÉLECTION */
+.image-preview {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.image-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #40dfff;
+  box-shadow: 0 0 10px rgba(64, 223, 255, 0.3);
+}
+
+/* --- LABELS --- */
+.input-label {
+  color: #8d8d8d;
+  display: block;
+  margin: 15px 0 10px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
